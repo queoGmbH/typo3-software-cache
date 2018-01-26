@@ -1,3 +1,6 @@
+## 1.0.1 (Januar 26, 2018)
+  - fixed problem with datetime in proxy
+
 ## 1.0.0 (Januar 26, 2018)
 
 
