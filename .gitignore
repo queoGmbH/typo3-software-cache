@@ -4,3 +4,4 @@
 # Composer
 /bin/
 /vendor/
+bumpversion.sh
