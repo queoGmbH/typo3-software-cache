@@ -1,0 +1,33 @@
+{
+  "name": "queo/typo3-software-cache",
+  "description": "Software cache for typo3 projects.",
+  "type": "library",
+  "license": "GPL-2.0+",
+  "config": {
+    "bin-dir": "bin",
+    "sort-packages": true,
+    "optimize-autoloader": true,
+    "platform": {
+      "php": "5.6.25"
+    }
+  },
+  "autoload": {
+    "psr-4": {
+      "Queo\\Typo3\\SoftwareCache\\": "src"
+    }
+  },
+  "autoload-dev": {
+    "psr-4": {
+      "Queo\\Typo3\\SoftwareCache\\Tests\\": "tests"
+    }
+  },
+  "require": {
+    "beberlei/assert": "^2.7",
+    "doctrine/cache": "^1.6",
+    "psr/log": "~1.0.0",
+    "symfony/http-foundation": "^3.2"
+  },
+  "require-dev": {
+    "phpunit/phpunit": "5.7.*"
+  }
+}
