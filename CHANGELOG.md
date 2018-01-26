@@ -1,3 +1,6 @@
+## 1.0.0 (Januar 26, 2018)
+
+
 ## 0.7.0 (Januar 23, 2018)
   - [TASK] Fix cookie-name in test
   - [TASK] Change cookie-name to localisation
