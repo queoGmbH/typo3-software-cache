@@ -55,19 +55,6 @@ class Proxy
      */
     public function handleRequest(Request $request)
     {
-        $logData = [
-            'SERVER' => [
-                "SCRIPT_URL"         => $_SERVER["SCRIPT_URL"],
-                "SCRIPT_URI"         => $_SERVER["SCRIPT_URI"],
-                "QUERY_STRING"       => $_SERVER["QUERY_STRING"],
-                "REQUEST_URI"        => $_SERVER["REQUEST_URI"],
-                "SCRIPT_NAME"        => $_SERVER["SCRIPT_NAME"],
-                "REQUEST_TIME_FLOAT" => $_SERVER["REQUEST_TIME_FLOAT"],
-                "REQUEST_TIME"       => $_SERVER["REQUEST_TIME"],
-            ],
-        ];
-
-        $this->logger->info('request', $logData);
         if (!$this->canHandleRequest($request))
         {
             return;
@@ -91,7 +78,7 @@ class Proxy
             return;
         }
         $this->logger->info('Save Response in Cache', ['CacheId' => $cacheId]);
-        $response->headers->set('SoftwareCached', new \DateTime);
+        $response->headers->set('X-Cache: HIT from QueoTypo3SoftwareCache', (new \DateTime())->format("Y-m-d H:i:s"));
 
         $this->cache->save($cacheId, serialize($response), 900);
     }
