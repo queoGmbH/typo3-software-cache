@@ -23,8 +23,8 @@
   },
   "require": {
     "beberlei/assert": "^2.7",
-    "doctrine/cache": "^1.6",
     "psr/log": "~1.0.0",
+    "symfony/cache": "^3.4",
     "symfony/http-foundation": "^3.2"
   },
   "require-dev": {

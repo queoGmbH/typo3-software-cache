@@ -14,6 +14,9 @@ class UriIdGenerator implements IdGenerator
      */
     public function generate(Request $request)
     {
-        return $request->getHttpHost() . $request->getUri();
+        $uri = $request->getHttpHost() . $request->getUri();
+
+        // reserved characters {}()/\@;
+        return preg_replace('/[{}()\/\\@:]/', '', $uri);
     }
 }
