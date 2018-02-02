@@ -28,6 +28,7 @@
     "symfony/http-foundation": "^3.2"
   },
   "require-dev": {
+    "phpmetrics/phpmetrics": "~2",
     "phpunit/phpunit": "5.7.*"
   }
 }
