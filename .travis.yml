@@ -4,4 +4,7 @@ php:
   - '7.0'
 install:
   - composer install
-script: bin/phpunit
+  - composer global require phpmetrics/phpmetrics:~2
+script:
+  - bin/phpunit
+  - phpmetrics --report-html=build/metric --git --quiet src\
