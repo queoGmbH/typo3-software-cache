@@ -2,7 +2,7 @@
 
 # TYPO3 Software Cache
 > *TL;DR*
-> Softwareseitige Bibliothek zum cachen von TYPO3 Requests.
+> Software based library to cache TYPO3 Requests.
 
 ## Allgemeine Informationen
 
@@ -14,9 +14,21 @@ Entwickler:
 ## Konzept
 > to be done
 ## Installation
+
+For easy installation add an index.php.dist file to your project and add the following commands to your composer.json
+
+````json
+"chmod 654 ./vendor/queo/typo3-software-cache/src/Scripts/installCache.sh",
+"./vendor/queo/typo3-software-cache/src/Scripts/installCache.sh index.php.dist",
+````
+
+We added an starting point with a simple index.php.dist in the base folder, you can use for your first steps or easy websites. It will cache the requests in the filesystem.
+
 ## Qualitätssicherung
 ### Unittests
-> to be done
+````bash
+bin/phpunit
+````
 ### Codemetriken erstellen
 [Phpmetrics](http://www.phpmetrics.org/) global installieren
 ````bash

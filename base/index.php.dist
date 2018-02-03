@@ -1,0 +1,30 @@
+<?php
+
+require_once __DIR__ . '/vendor/autoload.php';
+
+$cacheDriver = new \Symfony\Component\Cache\Adapter\FilesystemAdapter();
+
+$cacheIdGenerator = new \Queo\Typo3\SoftwareCache\Cache\CombinedIdGenerator([
+    new \Queo\Typo3\SoftwareCache\Cache\UriIdGenerator
+]);
+
+$logger = new \Psr\Log\NullLogger;
+
+$proxy   = new \Queo\Typo3\SoftwareCache\Proxy\Proxy($cacheDriver, $cacheIdGenerator, $logger);
+$request = \Symfony\Component\HttpFoundation\Request::createFromGlobals();
+
+$proxy->addRequestRules([
+    new \Queo\Typo3\SoftwareCache\Request\Rule\HttpMethodRule('GET')
+]);
+$proxy->handleRequest($request);
+
+require $_SERVER['DOCUMENT_ROOT'] . '/typo3.php';
+
+$response = new \Symfony\Component\HttpFoundation\Response($GLOBALS['TSFE']->content);
+
+$proxy->addCacheRules([
+    new \Queo\Typo3\SoftwareCache\Cache\Rule\HttpMethodRule('GET'),
+    new \Queo\Typo3\SoftwareCache\Cache\Rule\DenyParamsRule(),
+    new \Queo\Typo3\SoftwareCache\Cache\Rule\DenyStringInContentRule('Page is being generated.'),
+]);
+$proxy->cacheResponse($request, $response);

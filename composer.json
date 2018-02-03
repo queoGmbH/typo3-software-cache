@@ -2,7 +2,7 @@
   "name": "queo/typo3-software-cache",
   "description": "Software cache for typo3 projects.",
   "type": "library",
-  "license": "GPL-2.0+",
+  "license": "GPL-2.0-or-later",
   "config": {
     "bin-dir": "bin",
     "sort-packages": true,
@@ -28,6 +28,7 @@
     "symfony/http-foundation": "^3.2"
   },
   "require-dev": {
+    "phpmetrics/phpmetrics": "~2",
     "phpunit/phpunit": "5.7.*"
   }
 }
