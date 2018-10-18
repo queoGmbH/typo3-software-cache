@@ -88,8 +88,7 @@ class Proxy
 
         $cacheItem = $this->cache
             ->getItem($cacheId)
-            ->set(serialize($response))
-            ->expiresAfter(900);
+            ->set(serialize($response));
 
         $this->cache->save($cacheItem);
     }
