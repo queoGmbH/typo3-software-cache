@@ -13,6 +13,11 @@ use Symfony\Component\HttpFoundation\Response;
 class Proxy
 {
     /**
+     * @var int default cache lifetime in seconds
+     */
+    protected const DEFAULT_CACHE_LIFETIME = 900;
+
+    /**
      * @var CacheItemPoolInterface
      */
     private $cache;
@@ -26,6 +31,21 @@ class Proxy
      * @var CacheRuleCollection
      */
     private $cacheRuleCollection;
+
+    /**
+     * @var array
+     */
+    protected $additionalHeaders = [];
+
+    /**
+     * @var array
+     */
+    protected $defaultHeaders = [];
+
+    /**
+     * @var int
+     */
+    protected $cacheLifetime;
 
     /**
      * @var IdGenerator
@@ -49,6 +69,10 @@ class Proxy
         $this->cacheRuleCollection   = new CacheRuleCollection();
         $this->cacheIdGenerator      = $cacheIdGenerator;
         $this->logger                = $logger;
+
+        $this->defaultHeaders = [
+            'X-Cache: HIT from QueoTypo3SoftwareCache' => (new \DateTime())->format("Y-m-d H:i:s")
+        ];
     }
 
     /**
@@ -83,14 +107,38 @@ class Proxy
         if ($this->cache->hasItem($cacheId) || !$this->canCacheResponse($request, $response)) {
             return;
         }
-        $this->logger->info('Save Response in Cache', ['CacheId' => $cacheId]);
-        $response->headers->set('X-Cache: HIT from QueoTypo3SoftwareCache', (new \DateTime())->format("Y-m-d H:i:s"));
 
+        $response = $this->buildHeaderData($response);
+
+        $this->logger->info('Save Response in Cache', ['CacheId' => $cacheId]);
         $cacheItem = $this->cache
             ->getItem($cacheId)
-            ->set(serialize($response));
+            ->set(serialize($response))
+            ->expiresAfter($this->getCacheLifetime());
 
         $this->cache->save($cacheItem);
+    }
+
+    /**
+     * @param Response $response
+     * @return Response
+     */
+    public function buildHeaderData(Response $response)
+    {
+        $headerData = array_merge($this->additionalHeaders, $this->defaultHeaders);
+
+        foreach ($headerData as $headerKey => $headerValue) {
+            $response->headers->set($headerKey, $headerValue);
+        }
+        return $response;
+    }
+
+    /**
+     * @param array $additionalHeaders
+     */
+    public function addAdditionalHeaders($additionalHeaders)
+    {
+        $this->additionalHeaders = $additionalHeaders;
     }
 
     /**
@@ -138,9 +186,9 @@ class Proxy
      */
     private function dispatchCache($key)
     {
-        /** @var Response $reponse */
-        $reponse = unserialize($this->cache->getItem($key)->get());
-        $reponse->send();
+        /** @var Response $response */
+        $response = unserialize($this->cache->getItem($key)->get());
+        $response->send();
     }
 
     /**
@@ -149,5 +197,18 @@ class Proxy
     protected function stop()
     {
         exit;
+    }
+
+    /**
+     * @param int $cacheLifetime
+     */
+    public function setCacheLifetime($cacheLifetime)
+    {
+        $this->cacheLifetime = $cacheLifetime ? : self::DEFAULT_CACHE_LIFETIME;
+    }
+
+    public function getCacheLifetime()
+    {
+        return $this->cacheLifetime ? : self::DEFAULT_CACHE_LIFETIME;
     }
 }
