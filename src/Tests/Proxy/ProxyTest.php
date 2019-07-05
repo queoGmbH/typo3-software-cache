@@ -68,4 +68,30 @@ class ProxyTest extends TestCase
 
         $this->assertEquals('Hello', $output);
     }
+
+    public function testGetDefaultCacheLifetime()
+    {
+        $this->assertInternalType("int", $this->proxy->getCacheLifetime());
+    }
+
+    public function testCustomCacheLifetimeHandling()
+    {
+        $customCacheLifetime = 9999;
+        $this->proxy->setCacheLifetime($customCacheLifetime);
+        $this->assertEquals($customCacheLifetime, $this->proxy->getCacheLifetime());
+    }
+
+    public function testBuildHeaderData()
+    {
+        $headerToTest = ['testHeader' => 'testValue'];
+        $this->proxy->addAdditionalHeaders($headerToTest);
+
+        $response = Response::create('Hello');
+        /** @var Response $cacheItem */
+        $cacheItem = $this->proxy->buildHeaderData($response);
+
+        foreach($headerToTest as $headerkey => $headerValue) {
+            $this->assertEquals($headerToTest[$headerkey], $cacheItem->headers->get($headerkey) );
+        }
+    }
 }
