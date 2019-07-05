@@ -15,7 +15,7 @@ class Proxy
     /**
      * @var int default cache lifetime in seconds
      */
-    protected const DEFAULT_CACHE_LIFETIME = 900;
+    const DEFAULT_CACHE_LIFETIME = 900;
 
     /**
      * @var CacheItemPoolInterface
