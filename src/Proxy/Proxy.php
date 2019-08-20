@@ -138,7 +138,7 @@ class Proxy
      */
     public function addAdditionalHeaders($additionalHeaders)
     {
-        $this->additionalHeaders = $additionalHeaders;
+        $this->additionalHeaders = array_merge($this->additionalHeaders, $additionalHeaders);
     }
 
     /**
@@ -207,6 +207,9 @@ class Proxy
         $this->cacheLifetime = $cacheLifetime ? : self::DEFAULT_CACHE_LIFETIME;
     }
 
+    /**
+     * @return int
+     */
     public function getCacheLifetime()
     {
         return $this->cacheLifetime ? : self::DEFAULT_CACHE_LIFETIME;
