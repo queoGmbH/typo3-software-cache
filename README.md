@@ -44,6 +44,10 @@ __Goldene Regeln:__
 - Metriken beachten
 
 ## Anleitung
-> to be done
+#### Cache über Typo3-Backend leeren
+Um den Cache über das Typo3-Backend leeren zu können, muss in der ext_localconf der Site-Extension folgender Hook ergänzt werden:
+````php
+$GLOBALS['TYPO3_CONF_VARS']['SC_OPTIONS']['t3lib/class.t3lib_tcemain.php']['clearCachePostProc'][] =  \Queo\Typo3\SoftwareCache\Service\CacheManagementService::class . '->clearCache';
+````
 ## FAQ
 > 42
