@@ -2,6 +2,14 @@
 
 require_once __DIR__ . '/vendor/autoload.php';
 
+// set cache lifetime in seconds
+$cacheLifetime = 3600;
+
+// set additional custom headers HEADER_KEY => HEADER_VALUE
+$additionalHeaders = [
+
+];
+
 $cacheDriver = new \Symfony\Component\Cache\Adapter\FilesystemAdapter();
 
 $cacheIdGenerator = new \Queo\Typo3\SoftwareCache\Cache\CombinedIdGenerator([
@@ -13,6 +21,9 @@ $logger = new \Psr\Log\NullLogger;
 $proxy   = new \Queo\Typo3\SoftwareCache\Proxy\Proxy($cacheDriver, $cacheIdGenerator, $logger);
 $request = \Symfony\Component\HttpFoundation\Request::createFromGlobals();
 
+// override default cache lifetime
+$proxy->setCacheLifetime($cacheLifetime);
+
 $proxy->addRequestRules([
     new \Queo\Typo3\SoftwareCache\Request\Rule\HttpMethodRule('GET')
 ]);
@@ -20,6 +31,11 @@ $proxy->handleRequest($request);
 
 require $_SERVER['DOCUMENT_ROOT'] . '/typo3.php';
 
+// add typo3-configured and additional headers
+$proxy->addAdditionalHeaders(\Queo\Typo3\SoftwareCache\Service\Typo3ConfigurationService::getConfiguredHeaders());
+$proxy->addAdditionalHeaders($additionalHeaders);
+
+// create response
 $response = new \Symfony\Component\HttpFoundation\Response($GLOBALS['TSFE']->content);
 
 $proxy->addCacheRules([

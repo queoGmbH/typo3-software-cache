@@ -9,6 +9,9 @@ use Symfony\Component\Filesystem\Filesystem;
 
 class ScriptHandler
 {
+    /**
+     * @param Event $event
+     */
     public static function installCacheCommand(Event $event)
     {
         $config  = InstallCacheConfigFactory::apply($event->getComposer()->getPackage()->getExtra());

@@ -8,7 +8,7 @@
     "sort-packages": true,
     "optimize-autoloader": true,
     "platform": {
-      "php": "5.6.25"
+      "php": "7.2"
     }
   },
   "autoload": {
@@ -22,10 +22,10 @@
     }
   },
   "require": {
-    "beberlei/assert": "^2.7",
-    "psr/log": "~1.0.0",
-    "symfony/cache": "^3.4",
-    "symfony/http-foundation": "^3.2"
+    "beberlei/assert": "*",
+    "psr/log": "*",
+    "symfony/cache": "*",
+    "symfony/http-foundation": "*"
   },
   "require-dev": {
     "phpmetrics/phpmetrics": "~2",
